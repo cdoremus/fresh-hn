@@ -7,18 +7,18 @@ const SESSION_KEY = "news-items";
 
 export async function fetchNewsItems(page: number): Promise<NewsItemDetails[]> {
   // Cache item ids in sessionStorage
-  console.log("SESSION STORAGE", sessionStorage);
+  // console.log("SESSION STORAGE", sessionStorage);
   const storedItems = sessionStorage ? sessionStorage.getItem(SESSION_KEY) : undefined;
   let ids = [];
-  if (!storedItems || storedItems.length < 2) {
+  // if (!storedItems || storedItems.length < 2) {
     const resp = await fetch(`https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty`);
     ids = await resp.json() as number[];
-    if (sessionStorage) {
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify(ids));
-    }
-  } else {
-    ids = JSON.parse(storedItems);
-  }
+  //   if (sessionStorage) {
+  //     sessionStorage.setItem(SESSION_KEY, JSON.stringify(ids));
+  //   }
+  // } else {
+  //   ids = JSON.parse(storedItems);
+  // }
   // console.log(`page ${page} ids ${ids.length}`);
   const items: NewsItemDetails[] = [];
   const sliceStart = PAGE_LENGTH * (page - 1);
