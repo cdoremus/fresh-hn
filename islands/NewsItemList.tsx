@@ -6,25 +6,26 @@ import { NewsItemDetails } from "../types.ts";
 import NewsItem from "../components/NewsItem.tsx";
 
 type NewsItemListProps = {
-  newsItems: NewsItemDetails[]
+  newsItems: NewsItemDetails[];
+  page: number;
 }
 
 export default function NewsItemList(props: NewsItemListProps) {
   const items = props.newsItems;
-  const [page, setPage] = useState<number>(1);
-  const incrementPage = () => {
-    setPage(() => page + 1);
-  }
+  const page= props.page;
   return (
     <div>
-      <ul class={ tw`list-none` }>
-        { items.map( (item: NewsItemDetails, index: number) => {
-          return (<NewsItem rank={ index + 1} item={item} />)
+      <table>
+        { items.map( (item: NewsItemDetails) => {
+          return (<NewsItem item={item} />)
         }) }
-      </ul>
+      </table>
       <div class={tw`center`}>Page {page}</div>
-      <div class={tw`center`}><a onClick={incrementPage}>Next Page</a></div>
-
+      { page > 1 ?
+        <div class={tw`center`}><a href={`/?page=${page - 1}`}>Prev Page</a></div>
+        : ""
+      }
+      <div class={tw`center`}><a href={`/?page=${page + 1}`}>Next Page</a></div>
     </div>
   )
 }

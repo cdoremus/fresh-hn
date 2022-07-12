@@ -1,21 +1,28 @@
 import { NewsItemDetails } from "../types.ts";
+// fake data for testing
 import * as json_data from "../data.json" assert {type: "json"};
 
 const PAGE_LENGTH = 20;
+const SESSION_KEY = "news-items";
 
-export async function fetchNewsItems(): Promise<NewsItemDetails[]> {
-  const resp = await fetch(`https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty`);
-  const ids = await resp.json() as number[];
+export async function fetchNewsItems(page: number): Promise<NewsItemDetails[]> {
+  // Cache item ids in sessionStorage
+  const storedItems = sessionStorage.getItem(SESSION_KEY);
+  let ids = [];
+  if (!storedItems || storedItems.length < 2) {
+    const resp = await fetch(`https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty`);
+    ids = await resp.json() as number[];
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(ids));
+  } else {
+    ids = JSON.parse(storedItems);
+  }
+  console.log(`page ${page} ids ${ids.length}`);
   const items: NewsItemDetails[] = [];
-  let count = 1;
-  for(const id of ids) {
+  const sliceStart = PAGE_LENGTH * (page - 1);
+  const idSlice = ids.slice(sliceStart, sliceStart + PAGE_LENGTH - 1)
+  for(const id of idSlice) {
     const item = await fetchNewsItem(id);
     items.push(item);
-    // show only top 20
-    if (count >= PAGE_LENGTH) {
-      break;
-    }
-    count++;
   }
   return items;
 }

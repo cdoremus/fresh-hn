@@ -10,13 +10,16 @@ import { tw } from "twind";
 
 export const handler: Handlers<NewsItemDetails[] | null> = {
   async GET(req: Request, ctx: HandlerContext) {
-    const items = await fetchNewsItems();
+    const url =  new URL(req.url);
+    // console.log("URL", url);
+    const search = new URLSearchParams(url.search);
+    const page = search.get("page") ? search.get("page") : 1;
+    const items = await fetchNewsItems(parseInt(page));
     // const items = fetchNewsItemsFromJson();
-    // console.log("ITEMS: ", JSON.stringify(items));
     if (items.size === 0) {
       return await ctx.render(null);
     }
-    const pageData = {items: items}
+    const pageData = {items: items, page: parseInt(page)};
     return await ctx.render(pageData);
   },
 };
@@ -30,8 +33,8 @@ export default function Page({ data }: PageProps<NewsItemDetails[] | null>) {
 
   return (
     <div  class={tw`p-4 mx-auto max-w-screen-md`}>
-      <h1 class={tw`text-xl font-bold`}>Hacker News</h1>
-      <NewsItemList newsItems={data.items} />
+      <h1 class={tw`text-3xl font-bold`}>Hacker News</h1>
+      <NewsItemList newsItems={data.items} page={data.page} />
     </div>
   );
 }
