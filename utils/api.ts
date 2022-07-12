@@ -7,6 +7,7 @@ const SESSION_KEY = "news-items";
 
 export async function fetchNewsItems(page: number): Promise<NewsItemDetails[]> {
   // Cache item ids in sessionStorage
+  console.log("SESSION STORAGE", sessionStorage);
   const storedItems = sessionStorage ? sessionStorage.getItem(SESSION_KEY) : undefined;
   let ids = [];
   if (!storedItems || storedItems.length < 2) {
