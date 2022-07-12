@@ -33,8 +33,20 @@ export default function Page({ data }: PageProps<NewsItemDetails[] | null>) {
 
   return (
     <div  class={tw`p-4 mx-auto max-w-screen-md`}>
-      <h1 class={tw`text-3xl font-bold`}>Hacker News</h1>
+      <div class={tw`flex flex-row border border-black p-2`}>
+        <div class={tw`flex-1 text-3xl font-bold text-center m-2`}>Hacker News</div>
+        <div class={tw`flex-initial mt-3`}>Page { data.page }</div>
+      </div>
       <NewsItemList newsItems={data.items} page={data.page} />
+      <footer class={tw`flex flex-row p-2 m-4 bg-gray-100`}>
+        { data.page > 1 ?
+          <div class={tw`flex-initial`}><a href={`/?page=${data.page - 1}`}>Prev Page</a></div>
+          : <div class={tw`flex-initial`}>{' '}</div>
+        }
+        <div class={tw`flex-1 text-center`}>Page { data.page }</div>
+        <div class={tw`flex-initial center`}><a href={`/?page=${data.page + 1}`}>Next Page</a></div>
+      </footer>
+
     </div>
   );
 }
