@@ -1,25 +1,12 @@
-import { NewsItemDetails } from "../types.ts";
+import { NewsItemDetails, NewsItemComments } from "../types.ts";
 // fake data for testing
 import * as json_data from "../data.json" assert {type: "json"};
 
 const PAGE_LENGTH = 20;
-const SESSION_KEY = "news-items";
 
 export async function fetchNewsItems(page: number): Promise<NewsItemDetails[]> {
-  // Cache item ids in sessionStorage
-  // console.log("SESSION STORAGE", sessionStorage);
-  // const storedItems = sessionStorage ? sessionStorage.getItem(SESSION_KEY) : undefined;
-  let ids = [];
-  // if (!storedItems || storedItems.length < 2) {
-    const resp = await fetch(`https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty`);
-    ids = await resp.json() as number[];
-  //   if (sessionStorage) {
-  //     sessionStorage.setItem(SESSION_KEY, JSON.stringify(ids));
-  //   }
-  // } else {
-  //   ids = JSON.parse(storedItems);
-  // }
-  // console.log(`page ${page} ids ${ids.length}`);
+  const resp = await fetch(`https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty`);
+  const ids = await resp.json() as number[];
   const items: NewsItemDetails[] = [];
   const sliceStart = PAGE_LENGTH * (page - 1);
   const idSlice = ids.slice(sliceStart, sliceStart + PAGE_LENGTH - 1)
@@ -28,6 +15,17 @@ export async function fetchNewsItems(page: number): Promise<NewsItemDetails[]> {
     items.push(item);
   }
   return items;
+}
+
+export async function fetchComments(id: number): Promise<NewsItemComments> {
+  const item = await fetchNewsItem(id);
+  const commentIds = item.kids;
+  const comments = []
+  for (const cid of commentIds) {
+    const comment = await fetchNewsItem(cid);
+    comments.push(comment);
+  }
+  return {comments, newsItem: item};
 }
 
 export async function fetchNewsItem(itemId: number): Promise<NewsItemDetails>  {

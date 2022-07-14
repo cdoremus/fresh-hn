@@ -13,7 +13,7 @@ export default function NewsItem(props: NewsItemProps) {
     <tr key={item.id} class={tw`text-lg even:bg-amber-100 odd:bg-blue-100`}>
       <td>
         <span class={tw`font-bold text-blue-900`}><a href={item.url} target="_blank">{item.title}</a></span>
-        <span class={tw`block`}>{' '}{item.score} points by {item.by} | <a href={`https://news.ycombinator.com/item?id=${item.id}`}>{item.descendants} Comments</a></span>
+        <span class={tw`block`}>{' '}{item.score} points by {item.by} | <a href={`/comments?id=${item.id}`}>{item.descendants} Comments</a></span>
       </td>
     </tr>
   )

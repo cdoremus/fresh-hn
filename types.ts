@@ -17,3 +17,8 @@ export type NewsItemDetails = {
   descendants: number; // In the case of stories or polls, the total comment count.
 }
 
+export type NewsItemComments = {
+  newsItem: NewsItemDetails;
+  comments: NewsItemDetails[];
+}
+

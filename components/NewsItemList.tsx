@@ -11,10 +11,10 @@ type NewsItemListProps = {
 export default function NewsItemList(props: NewsItemListProps) {
   const items = props.newsItems;
   return (
-    <table class={tw`ml-3`}>
-      { items.map( (item: NewsItemDetails) => {
-        return (<NewsItem item={item} />)
-      }) }
+    <table class={tw`w-full`}>
+        { items.map( (item: NewsItemDetails) => {
+          return (<NewsItem item={item} />)
+        }) }
     </table>
   )
 }
