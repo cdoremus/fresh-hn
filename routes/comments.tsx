@@ -34,7 +34,7 @@ export default function Page({ data }: PageProps<NewsItemComments | null>) {
   return (
     <Fragment>
       <div class={tw`text-3xl`}>{data.newsItem.title}</div>
-      <div class={tw`text-m`}>{data.newsItem.score} points by {data.newsItem.by}</div>
+      <div class={tw`text-l mb-3`}>{data.newsItem.score} points by {data.newsItem.by}</div>
       <hr/>
       <Comments comments={comments} />
     </Fragment>

@@ -39,14 +39,14 @@ export default function Page({ data }: PageProps<NewsPageData | null>) {
     <Fragment>
       <h1 class={tw`text-center`}>Page {data.page}</h1>
       <NewsItemList newsItems={data.items} />
-      <footer class={tw`flex flex-row p-2 m-4 bg-gray-100`}>
+      <div class={tw`flex flex-row p-2 m-4 bg-gray-100`}>
         { data.page > 1 ?
           <div class={tw`flex-initial`}><a href={`/?page=${data.page - 1}`}>Prev Page</a></div>
           : <div class={tw`flex-initial`}>{' '}</div>
         }
         <div class={tw`flex-1 text-center`}>Page { data.page }</div>
         <div class={tw`flex-initial center`}><a href={`/?page=${data.page + 1}`}>Next Page</a></div>
-      </footer>
+      </div>
     </Fragment>
   );
 }

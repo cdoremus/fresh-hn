@@ -12,7 +12,10 @@ export default function Comment(props: CommentProps) {
   const comment = props.comment;
   return (
     <Fragment>
-      <div>{comment.by}</div>
+      <div class={tw`flex flex-row justify-between`}>
+        <div class={tw`text-left`}>by {comment.by}</div>
+        <div class={tw`text-right`}>{comment?.kids?.length ? `${comment.kids.length} subcomments`: "0 subcomment"}</div>
+      </div>
       { /*
       //@ts-ignore-next-line */}
       <li class={tw`m-2`} dangerouslySetInnerHTML={{__html: comment.text}}>

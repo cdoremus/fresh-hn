@@ -11,11 +11,14 @@ export default function App({ Component }: AppProps) {
         {/* <!-- link rel="stylesheet" href={asset("style.css")} / --> */}
       </Head>
       <body class={tw`m-x-50 m-y-0 p-4 mx-auto max-w-screen-md`}>
-        <div class={tw`flex flex-row border border-black p-2`}>
+        <header class={tw`flex flex-row border border-black p-2`}>
           <div class={tw`flex-1 text-3xl font-bold text-center`}>FRESH<img class={tw`inline`} src="logo.svg"/> Hacker News</div>
           <div class={tw`flex-initial mt-3`}><a href="/">Home</a></div>
-        </div>
+        </header>
         <Component />
+        <footer>
+          <div class={tw`text-center border`}>Created with the <a href="https://fresh.deno.dev" target="_blank">FRESH<img class={tw`inline`} src="logo.svg"/></a> framework</div>
+        </footer>
       </body>
     </html>
   );
