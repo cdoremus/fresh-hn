@@ -11,11 +11,11 @@ type CommentsProps = {
 export default function Comments(props: CommentsProps) {
   const comments = props.comments;
   return (
-    <ul class={tw`list-none`}>
+    <div>
     { comments.map((comment: NewsItemDetails) => {
         return <Comment comment={comment} />
       })
     }
-    </ul>
+    </div>
   )
 }

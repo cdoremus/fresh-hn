@@ -1,11 +1,14 @@
-import { NewsItemDetails, NewsItemComments } from "../types.ts";
+import { NewsItemDetails, NewsItemComment } from "../types.ts";
 // fake data for testing
 import * as json_data from "../data.json" assert {type: "json"};
 
 const PAGE_LENGTH = 20;
+const QUERY_STRING = "?print=pretty";
+const STORY_URL = `https://hacker-news.firebaseio.com/v0/topstories.json${QUERY_STRING}`;
+const ITEM_URL = `https://hacker-news.firebaseio.com/v0/item/`;
 
 export async function fetchNewsItems(page: number): Promise<NewsItemDetails[]> {
-  const resp = await fetch(`https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty`);
+  const resp = await fetch(STORY_URL);
   const ids = await resp.json() as number[];
   const items: NewsItemDetails[] = [];
   const sliceStart = PAGE_LENGTH * (page - 1);
@@ -17,19 +20,37 @@ export async function fetchNewsItems(page: number): Promise<NewsItemDetails[]> {
   return items;
 }
 
-export async function fetchComments(id: number): Promise<NewsItemComments> {
-  const item = await fetchNewsItem(id);
-  const commentIds = item.kids;
-  const comments = []
-  for (const cid of commentIds) {
-    const comment = await fetchNewsItem(cid);
-    comments.push(comment);
+export async function fetchComments(commentId: number, level: number = 0): Promise<NewsItemComment> {
+  const item  = await fetchNewsItem(commentId);
+  const {id, by, text, kids} = item;
+  const subcommentIds = kids ?? [];
+
+  for (const cid of subcommentIds) {
+    const child = await fetchNewsItem(cid);
   }
-  return {comments, newsItem: item};
+  // TODO: continue to fetch the whole tree of subcomments
+  //  for each comment
+  return {id, author: by, content: text ?? "", level};
 }
 
+export async function fetchSubcommentTree(commentIds: number[]) {
+  // const commentTree: NewsItemComment = [];
+  for ( const cid of commentIds) {
+    const child: NewsItemDetails = await fetchNewsItem(cid);
+    const {id, by, text} = child;
+    let subcomment = {id, author: by, content: text};
+    if (child.kids) {
+      for (const kid of child.kids) {
+        const subs = await fetchComment(kids);
+        subcomment;
+      }
+    }
+  }
+}
+
+
 export async function fetchNewsItem(itemId: number): Promise<NewsItemDetails>  {
-  const resp = await fetch(`https://hacker-news.firebaseio.com/v0/item/${itemId}.json?print=pretty`);
+  const resp = await fetch(`${ITEM_URL}${itemId}.json${QUERY_STRING}`);
   const item: NewsItemDetails = await resp.json() as NewsItemDetails;
   return item;
 }

@@ -10,13 +10,14 @@ export const handler: Handlers<NewsItemDetails[] | null> = {
   //@ts-ignore-next-line
   async GET(req: Request, ctx: HandlerContext) {
     const url =  new URL(req.url);
-    // console.log("URL", url);
+    console.log("URL", url);
     const search = new URLSearchParams(url.search);
     const pageParamVal = search.get("id") ?? "";
     if (!pageParamVal) {
       ctx.render({comments: null});
     }
     const id = parseInt(pageParamVal);
+    // TODO: fetch the whole tree of subcomments for each comment
     const comments = await fetchComments(id);
     const pageData: NewsItemComments = {comments: comments.comments, newsItem: comments.newsItem}
     return await ctx.render(pageData);

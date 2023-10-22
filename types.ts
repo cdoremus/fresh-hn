@@ -9,7 +9,7 @@ export type NewsItemDetails = {
   dead?: boolean; // true if the item is dead.
   parent?: number[]; // The comment's parent: either another comment or the relevant story.
   poll?: string; // The pollopt's associated poll.
-  kids: number[]; // The ids of the item's comments, in ranked display order.
+  kids?: number[]; // The ids of the item's comments, in ranked display order.
   url: string; // The URL of the story.
   score: number; // The story's score, or the votes for a pollopt.
   title: string; // The title of the story, poll or job. HTML.
@@ -17,8 +17,11 @@ export type NewsItemDetails = {
   descendants: number; // In the case of stories or polls, the total comment count.
 }
 
-export type NewsItemComments = {
-  newsItem: NewsItemDetails;
-  comments: NewsItemDetails[];
+export type NewsItemComment = {
+  id: number; // id when type="comment"
+  author: string // comment author
+  level: number; // 0,1,2,3... 0 is top level
+  content: string; // comment text
+  parentId?: number; // the comment if of the parent
+  subcomments?: NewsItemComment[] // comments on the comment
 }
-
